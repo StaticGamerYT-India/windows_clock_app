@@ -6,7 +6,7 @@ import DismissPopup from "../../components/DismissPopup";
 const FocusSession = () => {
   const { startFocusSession } = useFullFocusSession();
   return (
-    <div className="overflow-y-auto h-screen flex-grow py-[40px] px-[50px]">
+    <div className="overflow-y-auto h-screen flex-grow py-[40px] px-[50px] bg-mica backdrop-blur-xl">
       {startFocusSession ? <FocusSection /> : <SetSession />}
       <DismissPopup />
     </div>
