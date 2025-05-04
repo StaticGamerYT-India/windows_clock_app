@@ -12,6 +12,7 @@ import FocusSessionBar from "./FocusSessionBar";
 const FocusSection = () => {
   const currentTimePeriod = useRef(0);
   const timer = useRef(null);
+  const lastNotificationTime = useRef(0);
   const { focusSession, toggleStartFocusSession } = useFullFocusSession();
   const { setShowDismiss, setShowTimeOnDismiss, setMainName, setName } = useDismissPopup();
   
@@ -22,13 +23,31 @@ const FocusSection = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [showTime, setShowTime] = useState(true);
   
-  // Properly calculate notification message
+  // Properly calculate notification message with rate limiting
   const showSessionCompleteNotification = useCallback(() => {
-    setPlaying(false);
-    setName("You have finished your focus session");
-    setMainName("Great job!");
-    setShowTimeOnDismiss(false);
-    setShowDismiss(true);
+    const now = Date.now();
+    // Only show notification if 5 seconds have passed since the last one
+    if (now - lastNotificationTime.current > 5000) {
+      setPlaying(false);
+      setName("You have finished your focus session");
+      setMainName("Great job!");
+      setShowTimeOnDismiss(false);
+      setShowDismiss(true);
+      lastNotificationTime.current = now;
+    }
+  }, [setName, setMainName, setShowDismiss, setShowTimeOnDismiss]);
+  
+  // Function to handle period transitions with rate limiting
+  const handlePeriodTransition = useCallback((isBreak) => {
+    const now = Date.now();
+    // Only show notification if 5 seconds have passed since the last one
+    if (now - lastNotificationTime.current > 5000) {
+      setName(`Now starting ${isBreak ? 'break' : 'focus'} period`);
+      setMainName(isBreak ? "Take a break!" : "Time to focus!");
+      setShowTimeOnDismiss(true);
+      setShowDismiss(true);
+      lastNotificationTime.current = now;
+    }
   }, [setName, setMainName, setShowDismiss, setShowTimeOnDismiss]);
   
   // Reset timer if focusSession changes
@@ -74,10 +93,7 @@ const FocusSection = () => {
           
           // Show period transition notification
           const isBreak = nextPeriodIndex % 2 !== 0;
-          setName(`Now starting ${isBreak ? 'break' : 'focus'} period`);
-          setMainName(isBreak ? "Take a break!" : "Time to focus!");
-          setShowTimeOnDismiss(true);
-          setShowDismiss(true);
+          handlePeriodTransition(isBreak);
           
           return nextDuration;
         }
@@ -86,7 +102,7 @@ const FocusSection = () => {
     }, 1000);
     
     return () => clearInterval(timer.current);
-  }, [playing, focusSession, showSessionCompleteNotification, setName, setMainName, setShowDismiss, setShowTimeOnDismiss]);
+  }, [playing, focusSession, showSessionCompleteNotification, handlePeriodTransition]);
 
   // Timer display with improved visual feedback
   const timerDisplay = useMemo(() => {
@@ -180,7 +196,7 @@ const FocusSection = () => {
       <div className="flex gap-4 items-center justify-center w-full">
         <button
           aria-label={playing ? "Pause session" : "Resume session"}
-          className="bg-customColor-blue p-3 rounded-full hover:bg-[#68aada] transition-colors duration-150 shadow-sm"
+          className="bg-customColor-blue p-3 rounded-full hover:bg-[#68aada] transition-colors duration-150 shadow-md"
           onClick={() => {
             setPlaying((prev) => !prev);
             setShowOptions(false);
@@ -196,7 +212,7 @@ const FocusSection = () => {
               toggleStartFocusSession();
               setShowOptions(false);
             }}
-            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-sm"
+            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-md"
           >
             <GoBack className="w-6 h-6"/>
           </button>
@@ -221,7 +237,7 @@ const FocusSection = () => {
           <button
             aria-label="More options"
             onClick={() => setShowOptions((prev) => !prev)}
-            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-sm options-button"
+            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-md options-button"
           >
             <ThreeDots className="w-6 h-6"/>
           </button>

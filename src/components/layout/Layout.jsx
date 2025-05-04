@@ -1,12 +1,14 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../Sidebar";
+import Sidebar from "./Sidebar";
+
 const Layout = () => {
   return (
-    <div className="flex">
+    <div className="flex h-screen bg-mica-dark overflow-hidden">
       <Sidebar />
-
-      <Outlet />
+      <main className="flex-1 overflow-hidden backdrop-blur-mica">
+        <Outlet />
+      </main>
     </div>
   );
 };
