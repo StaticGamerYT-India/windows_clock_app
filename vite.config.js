@@ -18,17 +18,12 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui': ['framer-motion', 'react-circular-progressbar'],
-          'state': ['zustand']
+          'ui': ['framer-motion']
         }
       }
     }
   },
   optimizeDeps: {
     include: ['framer-motion', 'zustand']
-  },
-  server: {
-    port: 3000,
-    open: true
   }
 })
