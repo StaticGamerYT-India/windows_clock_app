@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -29,18 +33,10 @@ body {
 }
 
 .sidebar_comp {
-  display: flex;
-  align-items: center;
-  position: relative;
-  gap: 8px;
-  padding: 7px 12px;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  transition: background 50ms;
-  border-radius: 4px;
+  @apply flex items-center gap-[10px] p-[10px] rounded-md hover:bg-[#303030] text-sm;
 }
 .sidebar_comp.active {
-  background-color: #2d2d2d;
+  @apply bg-mica-component text-white;
 }
 .sidebar_comp.active::before {
   content: "";
@@ -129,4 +125,18 @@ body {
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
   transform: translateY(-5px);
   border: 1px solid #3e3e3e;
+}
+
+/* Windows-style component */
+.windows-component {
+  @apply bg-mica-component rounded-[6px] border border-[#252525] shadow;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Set session and focus section components */
+.set-session, .focus-section {
+  @apply flex flex-col gap-4 md:gap-5 bg-mica-component rounded-[6px] p-4 md:px-5 md:pt-3 md:pb-7 border border-[#252525] shadow select-none w-full max-w-md mx-auto;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }

@@ -134,8 +134,7 @@ const FocusSection = () => {
 
   return (
     // Adjusted padding, gap, max-width
-    <div className="flex items-center justify-center flex-col gap-4 md:gap-5 bg-[#323232] rounded-[6px] p-4 md:px-5 md:pt-3 md:pb-7 border border-[#252525] shadow select-none w-full max-w-md mx-auto"> {/* Adjusted max-width */}
-      {/* Adjusted text size */}
+    <div className="focus-section">
       <header className="flex w-full text-xl md:text-2xl font-semibold justify-center md:justify-start">
          {currentPeriodType === 'Focus'
            ? `Focus period (${currentFocusPeriodNumber} of ${totalFocusPeriods})`

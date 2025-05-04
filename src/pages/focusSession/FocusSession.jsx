@@ -3,10 +3,12 @@ import SetSession from "./SetSession";
 import { useFullFocusSession } from "../../store/useFullFocusSession";
 import FocusSection from "./FocusSection";
 import DismissPopup from "../../components/DismissPopup";
+
 const FocusSession = () => {
   const { startFocusSession } = useFullFocusSession();
+  
   return (
-    <div className="overflow-y-auto h-screen flex-grow py-[40px] px-[50px] bg-mica backdrop-blur-xl">
+    <div className="overflow-y-auto h-screen flex-grow py-[40px] px-[50px] relative bg-mica-dark backdrop-blur-mica">
       {startFocusSession ? <FocusSection /> : <SetSession />}
       <DismissPopup />
     </div>
