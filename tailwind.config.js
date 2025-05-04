@@ -51,6 +51,10 @@ export default {
             backgroundColor: 'transparent',
           },
         },
+        '.backdrop-blur-mica': {
+          backdropFilter: 'blur(35px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+        },
       };
       addUtilities(newUtilities, ['responsive', 'hover']);
     },
