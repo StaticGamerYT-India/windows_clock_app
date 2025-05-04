@@ -8,6 +8,7 @@ import Check from "../../assets/icons/Check";
 import plant from "../../assets/images/plant.png";
 import { useDismissPopup } from "../../store/useDismissPopup";
 import FocusSessionBar from "./FocusSessionBar";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FocusSection = () => {
   const currentTimePeriod = useRef(0);
@@ -177,8 +178,18 @@ const FocusSection = () => {
   }, [showOptions]);
 
   return (
-    <div className="focus-section flex flex-col items-center gap-8 max-w-2xl mx-auto">
-      <header className="w-full">
+    <motion.div 
+      className="focus-section flex flex-col items-center gap-8 max-w-2xl mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.header 
+        className="w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.3 }}
+      >
         <h1 className="text-2xl font-semibold text-center md:text-left">
           {currentPeriodType === 'Focus'
             ? `Focus period (${currentFocusPeriodNumber} of ${totalFocusPeriods})`
@@ -186,15 +197,34 @@ const FocusSection = () => {
         </h1>
         
         {/* Focus session progress bar */}
-        <div className="mt-4">
+        <motion.div 
+          className="mt-4"
+          initial={{ scaleX: 0.9, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        >
           <FocusSessionBar currentPeriod={currentTimePeriod.current} />
-        </div>
-      </header>
+        </motion.div>
+      </motion.header>
       
-      {timerDisplay}
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.5, type: "spring", stiffness: 200 }}
+        className="relative"
+      >
+        {timerDisplay}
+      </motion.div>
       
-      <div className="flex gap-4 items-center justify-center w-full">
-        <button
+      <motion.div 
+        className="flex gap-4 items-center justify-center w-full"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.3 }}
+      >
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
           aria-label={playing ? "Pause session" : "Resume session"}
           className="bg-customColor-blue p-3 rounded-full hover:bg-[#68aada] transition-colors duration-150 shadow-md"
           onClick={() => {
@@ -203,47 +233,64 @@ const FocusSection = () => {
           }}
         >
           {playing ? <Stop className="w-6 h-6"/> : <Play className="w-6 h-6"/>}
-        </button>
+        </motion.button>
         
-        {!playing && (
-          <button
-            aria-label="Go back to session setup"
-            onClick={() => {
-              toggleStartFocusSession();
-              setShowOptions(false);
-            }}
-            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-md"
-          >
-            <GoBack className="w-6 h-6"/>
-          </button>
-        )}
+        <AnimatePresence>
+          {!playing && (
+            <motion.button
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="Go back to session setup"
+              onClick={() => {
+                toggleStartFocusSession();
+                setShowOptions(false);
+              }}
+              className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-md"
+            >
+              <GoBack className="w-6 h-6"/>
+            </motion.button>
+          )}
+        </AnimatePresence>
         
         <div className="relative">
           {/* Options menu with improved positioning and interaction */}
-          {showOptions && (
-            <div className="absolute bottom-full mb-3 right-0 md:left-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10 options-menu min-w-[200px]">
-              <button
-                onClick={() => setShowTime((prev) => !prev)}
-                className="flex items-center w-full text-left p-3 text-sm hover:bg-[#3b3b3b] rounded-t-lg transition-colors"
+          <AnimatePresence>
+            {showOptions && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-full mb-3 right-0 md:left-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10 options-menu min-w-[200px]"
               >
-                <div className="flex items-center justify-center w-6 h-6 mr-2">
-                  {showTime && <Check className="w-4 h-4"/>}
-                </div>
-                Show time remaining
-              </button>
-            </div>
-          )}
+                <button
+                  onClick={() => setShowTime((prev) => !prev)}
+                  className="flex items-center w-full text-left p-3 text-sm hover:bg-[#3b3b3b] rounded-t-lg transition-colors"
+                >
+                  <div className="flex items-center justify-center w-6 h-6 mr-2">
+                    {showTime && <Check className="w-4 h-4"/>}
+                  </div>
+                  Show time remaining
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
           
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
             aria-label="More options"
             onClick={() => setShowOptions((prev) => !prev)}
             className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-md options-button"
           >
             <ThreeDots className="w-6 h-6"/>
-          </button>
+          </motion.button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

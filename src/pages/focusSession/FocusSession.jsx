@@ -1,103 +1,147 @@
-import React, { useState } from "react";
-import SetSession from "./SetSession";
+import React, { useState, useEffect } from "react";
 import { useFullFocusSession } from "../../store/useFullFocusSession";
+import SetSession from "./SetSession";
 import FocusSection from "./FocusSection";
-import DismissPopup from "../../components/DismissPopup";
-import Stats from "./Stats";
 import TasksList from "./TasksList";
 import EnvironmentSettings from "./EnvironmentSettings";
+import Stats from "./Stats";
 import FocusPresets from "./FocusPresets";
+import { motion, AnimatePresence } from "framer-motion";
 
 const FocusSession = () => {
-  const { startFocusSession } = useFullFocusSession();
   const [activeTab, setActiveTab] = useState("setup");
+  const { startFocusSession } = useFullFocusSession();
+  
+  // Add a fade-in effect when component mounts
+  useEffect(() => {
+    document.querySelector('.focus-session-container')?.classList.add('fade-in');
+  }, []);
   
   // Only show tabs when not in an active session
   const renderTabs = () => {
     if (startFocusSession) return null;
     
     return (
-      <div className="border-b border-[#333] mb-6">
+      <motion.div 
+        className="border-b border-[#333] mb-6"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <div className="flex">
           <button
             onClick={() => setActiveTab("setup")}
-            className={`px-4 py-2 font-medium ${
+            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
               activeTab === "setup" 
-                ? "border-b-2 border-customColor-blue text-white" 
+                ? "text-white" 
                 : "text-[#a0a0a0] hover:text-white"
             }`}
           >
             Setup
+            {activeTab === "setup" && (
+              <motion.div 
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
+                layoutId="activeTabIndicator"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
           </button>
           <button
             onClick={() => setActiveTab("tasks")}
-            className={`px-4 py-2 font-medium ${
+            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
               activeTab === "tasks" 
-                ? "border-b-2 border-customColor-blue text-white" 
+                ? "text-white" 
                 : "text-[#a0a0a0] hover:text-white"
             }`}
           >
             Tasks
+            {activeTab === "tasks" && (
+              <motion.div 
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
+                layoutId="activeTabIndicator"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
           </button>
           <button
             onClick={() => setActiveTab("environment")}
-            className={`px-4 py-2 font-medium ${
+            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
               activeTab === "environment" 
-                ? "border-b-2 border-customColor-blue text-white" 
+                ? "text-white" 
                 : "text-[#a0a0a0] hover:text-white"
             }`}
           >
             Environment
+            {activeTab === "environment" && (
+              <motion.div 
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
+                layoutId="activeTabIndicator"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
           </button>
           <button
             onClick={() => setActiveTab("stats")}
-            className={`px-4 py-2 font-medium ${
+            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
               activeTab === "stats" 
-                ? "border-b-2 border-customColor-blue text-white" 
+                ? "text-white" 
                 : "text-[#a0a0a0] hover:text-white"
             }`}
           >
             Stats
+            {activeTab === "stats" && (
+              <motion.div 
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
+                layoutId="activeTabIndicator"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
           </button>
         </div>
-      </div>
+      </motion.div>
     );
   };
-  
+
   const renderContent = () => {
     if (startFocusSession) {
       return <FocusSection />;
     }
-    
-    switch (activeTab) {
-      case "setup":
-        return (
-          <>
-            <FocusPresets />
-            <SetSession />
-          </>
-        );
-      case "tasks":
-        return <TasksList />;
-      case "environment":
-        return <EnvironmentSettings />;
-      case "stats":
-        return <Stats />;
-      default:
-        return <SetSession />;
-    }
+
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -10 }}
+          transition={{ duration: 0.3 }}
+        >
+          {activeTab === "setup" && (
+            <div>
+              <FocusPresets />
+              <SetSession />
+            </div>
+          )}
+          {activeTab === "tasks" && <TasksList />}
+          {activeTab === "environment" && <EnvironmentSettings />}
+          {activeTab === "stats" && <Stats />}
+        </motion.div>
+      </AnimatePresence>
+    );
   };
-  
+
   return (
-    <div className="h-screen flex flex-col bg-mica-dark">
-      <div className="flex-grow overflow-auto py-6 px-4 md:py-10 md:px-8 lg:px-12 
-                     scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
-        <div className="max-w-4xl mx-auto">
-          {renderTabs()}
-          {renderContent()}
-        </div>
-      </div>
-      <DismissPopup />
+    <div className="focus-session-container p-6 max-w-4xl mx-auto">
+      {renderTabs()}
+      {renderContent()}
     </div>
   );
 };
