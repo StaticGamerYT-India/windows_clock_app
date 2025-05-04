@@ -1,0 +1,108 @@
+/* Mobile-first approach */
+.xs\:flex-row {
+  flex-direction: row;
+}
+
+.xs\:flex-none {
+  flex: none;
+}
+
+.xs\:rounded-l-md {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.xs\:rounded-r-md {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.xs\:rounded-l-none {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.xs\:rounded-r-none {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.xs\:ml-0 {
+  margin-left: 0;
+}
+
+.xs\:gap-0 {
+  gap: 0;
+}
+
+@media (min-width: 480px) {
+  .xs\:flex-row {
+    flex-direction: row;
+  }
+  
+  .xs\:flex-none {
+    flex: none;
+  }
+  
+  .xs\:rounded-l-md {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+  }
+  
+  .xs\:rounded-r-md {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+  
+  .xs\:rounded-l-none {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  .xs\:rounded-r-none {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  .xs\:ml-0 {
+    margin-left: 0;
+  }
+  
+  .xs\:gap-0 {
+    gap: 0;
+  }
+}
+
+/* Fix for mobile height issues */
+@media (max-width: 767px) {
+  .focus-section {
+    padding-bottom: 80px;
+  }
+  
+  .timer-display-mobile {
+    height: 180px;
+    width: 180px;
+  }
+  
+  .task-controls-mobile {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Fix for mobile overflow issues */
+.mobile-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Improved tap targets for mobile */
+@media (max-width: 767px) {
+  button, 
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

@@ -41,13 +41,13 @@ const TasksList = () => {
 
   return (
     <motion.div 
-      className="bg-[#2a2a2a] rounded-lg p-5 mb-6"
+      className="bg-[#2a2a2a] rounded-lg p-3 md:p-5 mb-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
       <header className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-medium">Focus Tasks</h2>
+        <h2 className="text-lg md:text-xl font-medium">Focus Tasks</h2>
         
         <AnimatePresence>
           {!isAddingTask && (
@@ -70,7 +70,7 @@ const TasksList = () => {
       <AnimatePresence>
         {isAddingTask && (
           <motion.div 
-            className="mb-4 flex"
+            className="mb-4 flex flex-col xs:flex-row gap-2 xs:gap-0"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -81,26 +81,28 @@ const TasksList = () => {
               value={newTaskText}
               onChange={(e) => setNewTaskText(e.target.value)}
               placeholder="What do you want to focus on?"
-              className="flex-grow bg-[#3a3a3a] text-white border border-[#4a4a4a] rounded-l-md px-3 py-2 focus:outline-none focus:border-customColor-blue"
+              className="flex-grow bg-[#3a3a3a] text-white border border-[#4a4a4a] rounded-md xs:rounded-l-md xs:rounded-r-none px-3 py-2 focus:outline-none focus:border-customColor-blue"
               onKeyDown={(e) => e.key === 'Enter' && addTask()}
               autoFocus
             />
-            <motion.button 
-              whileHover={{ backgroundColor: "#68a8d6" }}
-              whileTap={{ scale: 0.95 }}
-              onClick={addTask}
-              className="bg-customColor-blue text-black px-4 py-2 rounded-r-md transition-colors"
-            >
-              Add
-            </motion.button>
-            <motion.button 
-              whileHover={{ backgroundColor: "#4e4e4e" }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsAddingTask(false)}
-              className="ml-2 bg-[#3e3e3e] text-white px-3 py-2 rounded-md transition-colors"
-            >
-              Cancel
-            </motion.button>
+            <div className="flex xs:flex-none">
+              <motion.button 
+                whileHover={{ backgroundColor: "#68a8d6" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={addTask}
+                className="flex-1 xs:flex-none bg-customColor-blue text-black px-4 py-2 rounded-l-md xs:rounded-l-none xs:rounded-r-none transition-colors"
+              >
+                Add
+              </motion.button>
+              <motion.button 
+                whileHover={{ backgroundColor: "#4e4e4e" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsAddingTask(false)}
+                className="flex-1 xs:flex-none ml-2 xs:ml-0 bg-[#3e3e3e] text-white px-3 py-2 rounded-r-md xs:rounded-r-md transition-colors"
+              >
+                Cancel
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

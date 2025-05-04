@@ -12,6 +12,9 @@ export default {
         'mica-darker': 'rgba(25, 25, 25, 0.9)',
         'mica-component': 'rgba(45, 45, 45, 0.6)', // Component background
       },
+      screens: {
+        'xs': '480px',
+      },
       colors: {
         customColor: {
           blue: "#3a9fe0",
@@ -51,6 +54,10 @@ export default {
         'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'spin-slow': 'spin 3s linear infinite',
         'bounce-subtle': 'bounce 2s infinite',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
       },
     },
   },

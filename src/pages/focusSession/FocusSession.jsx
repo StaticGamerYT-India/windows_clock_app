@@ -139,7 +139,7 @@ const FocusSession = () => {
   };
 
   return (
-    <div className="focus-session-container p-6 max-w-4xl mx-auto">
+    <div className="focus-session-container py-4 md:p-6 max-w-4xl mx-auto">
       {renderTabs()}
       {renderContent()}
     </div>
