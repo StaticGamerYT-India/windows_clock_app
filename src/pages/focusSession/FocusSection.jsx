@@ -53,41 +53,38 @@ const FocusSection = () => {
       return;
     }
     
-    const startTimer = () => {
-      clearInterval(timer.current);
-      timer.current = setInterval(() => {
-        setSecs(prev => {
-          if (prev <= 1) {
-            clearInterval(timer.current);
-            const nextPeriodIndex = currentTimePeriod.current + 1;
-            
-            // If we've reached the end of the session
-            if (nextPeriodIndex >= focusSession.length) {
-              showSessionCompleteNotification();
-              return 0;
-            }
-            
-            // Move to next period
-            currentTimePeriod.current = nextPeriodIndex;
-            const nextDuration = focusSession[nextPeriodIndex] * 60;
-            
-            // Show period transition notification
-            const isBreak = nextPeriodIndex % 2 !== 0;
-            setName(`Now starting ${isBreak ? 'break' : 'focus'} period`);
-            setMainName(isBreak ? "Take a break!" : "Time to focus!");
-            setShowTimeOnDismiss(true);
-            setShowDismiss(true);
-            
-            // Restart the timer
-            setTimeout(startTimer, 300);
-            return nextDuration;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    };
+    // Clear any existing timer first
+    clearInterval(timer.current);
     
-    startTimer();
+    timer.current = setInterval(() => {
+      setSecs(prev => {
+        if (prev <= 1) {
+          clearInterval(timer.current);
+          const nextPeriodIndex = currentTimePeriod.current + 1;
+          
+          // If we've reached the end of the session
+          if (nextPeriodIndex >= focusSession.length) {
+            showSessionCompleteNotification();
+            return 0;
+          }
+          
+          // Move to next period
+          currentTimePeriod.current = nextPeriodIndex;
+          const nextDuration = focusSession[nextPeriodIndex] * 60;
+          
+          // Show period transition notification
+          const isBreak = nextPeriodIndex % 2 !== 0;
+          setName(`Now starting ${isBreak ? 'break' : 'focus'} period`);
+          setMainName(isBreak ? "Take a break!" : "Time to focus!");
+          setShowTimeOnDismiss(true);
+          setShowDismiss(true);
+          
+          return nextDuration;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
     return () => clearInterval(timer.current);
   }, [playing, focusSession, showSessionCompleteNotification, setName, setMainName, setShowDismiss, setShowTimeOnDismiss]);
 
@@ -131,7 +128,7 @@ const FocusSection = () => {
             key={i}
             className={`absolute ${
               i < segmentsToShow ? "bg-customColor-blue" : "bg-[#494949]"
-            } w-5 h-1.5 rounded-full transform`}
+            } w-5 h-1.5 rounded-full`}
             style={{ 
               transform: `rotate(${i * 15}deg) translateX(100px)`,
               transformOrigin: "center"

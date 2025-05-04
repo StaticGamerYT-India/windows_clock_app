@@ -10,9 +10,10 @@ const SetTime = ({ unit }) => {
   const handleIncrement = () => {
     const currentIndex = session[unit];
     // Find the next valid index within the acceptable range
-    let nextIndex = currentIndex + 1;
+    const nextIndex = currentIndex + 1;
     const maxTime = unit === "focus" ? 240 : 15;
     
+    // Check if next index exists and its value is within limits
     if (nextIndex < times.length && times[nextIndex] <= maxTime) {
       setSession(unit, nextIndex);
     }
@@ -21,9 +22,10 @@ const SetTime = ({ unit }) => {
   const handleDecrement = () => {
     const currentIndex = session[unit];
     // Find the previous valid index within the acceptable range
-    let prevIndex = currentIndex - 1;
+    const prevIndex = currentIndex - 1;
     const minTime = 5;
     
+    // Check if previous index exists and its value is within limits
     if (prevIndex >= 0 && times[prevIndex] >= minTime) {
       setSession(unit, prevIndex);
     }

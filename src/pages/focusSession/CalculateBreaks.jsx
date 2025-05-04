@@ -5,6 +5,7 @@ import { useSession } from "../../store/useSetSessionTimes";
 import { mergeArrays } from "../../utils/mergeArrays";
 import { useFullFocusSession } from "../../store/useFullFocusSession";
 import FocusSessionBar from "./FocusSessionBar";
+import { times } from "../../data/focusSessionTimes";
 
 const CalculateBreaks = () => {
   const [check, setCheck] = useState(false);

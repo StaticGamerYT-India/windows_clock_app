@@ -8,19 +8,19 @@ const SetSession = () => {
   const { toggleStartFocusSession } = useFullFocusSession();
   
   return (
-    <div className="set-session flex flex-col items-center gap-8 py-4">
-      <header className="w-full text-center">
-        <h1 className="text-3xl font-medium mb-1">Get ready to focus</h1>
+    <div className="set-session flex flex-col items-center gap-8 py-6">
+      <header className="w-full text-center mb-2">
+        <h1 className="text-3xl font-medium mb-2">Get ready to focus</h1>
         <p className="text-[#a0a0a0]">Set your focus and break durations</p>
       </header>
       
-      <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6 md:gap-8 w-full">
-        <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-8 w-full">
+        <div className="flex flex-col items-center gap-3">
           <SetTime unit="focus" />
           <p className="text-[#c9c9c9] font-medium">Focus time</p>
         </div>
         
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-3">
           <SetTime unit="breaks" />
           <p className="text-[#c9c9c9] font-medium">Break time</p>
         </div>
@@ -28,7 +28,7 @@ const SetSession = () => {
       
       <CalculateBreaks />
       
-      <div className="w-full flex justify-center mt-2">
+      <div className="w-full flex justify-center mt-4">
         <button
           onClick={toggleStartFocusSession}
           type="button"

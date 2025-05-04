@@ -9,7 +9,8 @@ const FocusSession = () => {
   
   return (
     <div className="h-screen flex flex-col bg-mica-dark backdrop-blur-mica">
-      <div className="flex-grow overflow-auto py-6 px-4 md:py-10 md:px-8 lg:px-12 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+      <div className="flex-grow overflow-auto py-6 px-4 md:py-10 md:px-8 lg:px-12 
+                     scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
         <div className="max-w-4xl mx-auto">
           {startFocusSession ? <FocusSection /> : <SetSession />}
         </div>
