@@ -58,7 +58,7 @@ const TasksList = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsAddingTask(true)}
-              className="flex items-center gap-1 text-sm text-customColor-blue hover:text-[#68a8d6] transition-colors"
+              className="flex items-center gap-1 text-sm text-customColor-blue hover:text-[#68a8d6] transition-colors tap-target"
             >
               <Plus color="currentColor" />
               <span>Add Task</span>
@@ -81,7 +81,7 @@ const TasksList = () => {
               value={newTaskText}
               onChange={(e) => setNewTaskText(e.target.value)}
               placeholder="What do you want to focus on?"
-              className="flex-grow bg-[#3a3a3a] text-white border border-[#4a4a4a] rounded-md xs:rounded-l-md xs:rounded-r-none px-3 py-2 focus:outline-none focus:border-customColor-blue"
+              className="flex-grow bg-[#3a3a3a] text-white border border-[#4a4a4a] rounded-md xs:rounded-l-md xs:rounded-r-none px-3 py-2 min-h-[44px] focus:outline-none focus:border-customColor-blue"
               onKeyDown={(e) => e.key === 'Enter' && addTask()}
               autoFocus
             />
@@ -90,7 +90,7 @@ const TasksList = () => {
                 whileHover={{ backgroundColor: "#68a8d6" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={addTask}
-                className="flex-1 xs:flex-none bg-customColor-blue text-black px-4 py-2 rounded-l-md xs:rounded-l-none xs:rounded-r-none transition-colors"
+                className="flex-1 xs:flex-none bg-customColor-blue text-black px-4 py-2 rounded-l-md xs:rounded-l-none xs:rounded-r-none transition-colors tap-target"
               >
                 Add
               </motion.button>
@@ -98,7 +98,7 @@ const TasksList = () => {
                 whileHover={{ backgroundColor: "#4e4e4e" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsAddingTask(false)}
-                className="flex-1 xs:flex-none ml-2 xs:ml-0 bg-[#3e3e3e] text-white px-3 py-2 rounded-r-md xs:rounded-r-md transition-colors"
+                className="flex-1 xs:flex-none ml-2 xs:ml-0 bg-[#3e3e3e] text-white px-3 py-2 rounded-r-md xs:rounded-r-md transition-colors tap-target"
               >
                 Cancel
               </motion.button>
@@ -143,7 +143,7 @@ const TasksList = () => {
                     onClick={() => toggleTaskCompletion(task.id)}
                     className={`w-5 h-5 rounded-sm flex items-center justify-center mr-3 transition-all duration-300 ${
                       task.completed ? 'bg-[#16cca2] text-black' : 'border border-[#5a5a5a]'
-                    }`}
+                    } tap-target`}
                   >
                     <AnimatePresence>
                       {task.completed && (
@@ -167,7 +167,7 @@ const TasksList = () => {
                   whileHover={{ scale: 1.1, color: "#c47b8c" }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => removeTask(task.id)}
-                  className="text-[#a0a0a0] transition-colors"
+                  className="text-[#a0a0a0] transition-colors tap-target"
                 >
                   <BinTrash className="w-4 h-4" />
                 </motion.button>

@@ -118,8 +118,8 @@ const FocusSection = () => {
     const displaySeconds = secs % 60;
 
     return (
-      <div className="flex items-center justify-center relative bg-[#3c3c3c] h-48 w-48 md:h-64 md:w-64 rounded-full border-2 border-[#414141] shadow-md">
-        <span className="flex items-baseline text-4xl md:text-5xl leading-tight">
+      <div className="flex items-center justify-center relative bg-[#3c3c3c] h-48 w-48 md:h-64 md:w-64 rounded-full border-2 border-[#414141] shadow-md timer-display-mobile">
+        <span className="flex items-baseline text-4xl md:text-5xl leading-tight timer-text-mobile">
           {showTime ? (
             <>
               {displayMinutes > 0 ? (
@@ -179,7 +179,7 @@ const FocusSection = () => {
 
   return (
     <motion.div 
-      className="focus-section flex flex-col items-center gap-5 md:gap-8 max-w-2xl mx-auto"
+      className="focus-section flex flex-col items-center gap-5 md:gap-8 max-w-2xl mx-auto px-3 md:px-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -217,7 +217,7 @@ const FocusSection = () => {
       </motion.div>
       
       <motion.div 
-        className="flex gap-4 items-center justify-center w-full"
+        className="flex gap-4 items-center justify-center w-full control-buttons-mobile"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.3 }}
@@ -226,7 +226,7 @@ const FocusSection = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           aria-label={playing ? "Pause session" : "Resume session"}
-          className="bg-customColor-blue p-3 rounded-full hover:bg-[#68aada] transition-colors duration-150 shadow-md"
+          className="bg-customColor-blue p-3 rounded-full hover:bg-[#68aada] transition-colors duration-150 shadow-md tap-target tap-highlight"
           onClick={() => {
             setPlaying((prev) => !prev);
             setShowOptions(false);

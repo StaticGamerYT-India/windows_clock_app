@@ -1,3 +1,8 @@
+/* Base mobile-first utilities */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
 /* Mobile-first approach */
 .xs\:flex-row {
   flex-direction: row;
@@ -5,6 +10,10 @@
 
 .xs\:flex-none {
   flex: none;
+}
+
+.xs\:grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 .xs\:rounded-l-md {
@@ -35,6 +44,7 @@
   gap: 0;
 }
 
+/* Extra small screens and up */
 @media (min-width: 480px) {
   .xs\:flex-row {
     flex-direction: row;
@@ -42,6 +52,10 @@
   
   .xs\:flex-none {
     flex: none;
+  }
+  
+  .xs\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   
   .xs\:rounded-l-md {
@@ -73,68 +87,136 @@
   }
 }
 
-/* Fix for mobile height issues */
+/* Small screens and up */
+@media (min-width: 640px) {
+  .timer-container, 
+  .alarm-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Medium screens and up */
+@media (min-width: 768px) {
+  .focus-session-container,
+  .timer-container, 
+  .alarm-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Large screens and up */
+@media (min-width: 1024px) {
+  .timer-container, 
+  .alarm-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Mobile-specific adjustments */
 @media (max-width: 767px) {
+  /* Focus section specific */
   .focus-section {
     padding-bottom: 80px;
   }
   
+  /* Timer display adjustments */
   .timer-display-mobile {
-    height: 180px;
-    width: 180px;
+    height: 180px !important;
+    width: 180px !important;
   }
   
+  /* Task controls layout adjustment */
   .task-controls-mobile {
     flex-direction: column;
     gap: 10px;
   }
+  
+  /* Smaller timer text on mobile */
+  .timer-text-mobile {
+    font-size: 2.5rem !important;
+  }
+  
+  /* Adjusted control buttons */
+  .control-buttons-mobile {
+    position: fixed;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #333;
+  }
+  
+  /* Modify animations for mobile */
+  .reduced-animation {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
 }
 
-/* Fix for mobile overflow issues */
+/* Universal mobile container */
 .mobile-container {
   max-width: 100%;
   overflow-x: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-/* Improved tap targets for mobile */
+/* Universal improvements for touch targets */
 @media (max-width: 767px) {
   button, 
   [role="button"],
+  a[href],
   input[type="checkbox"],
-  input[type="radio"] {
+  input[type="radio"],
+  select,
+  .tap-target {
     min-height: 44px;
     min-width: 44px;
   }
   
-  .mobile-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(26, 26, 26, 0.95);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #333;
-    z-index: 50;
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0;
+  /* Better spacing for forms */
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS zoom */
+    margin-bottom: 8px;
   }
   
-  .mobile-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 8px;
-    color: #a0a0a0;
-    transition: all 0.2s ease;
+  /* Improved tap targets for lists */
+  li {
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
   
-  .mobile-nav-item.active {
-    color: white;
+  /* Reduce animations on mobile for better performance */
+  * {
+    animation-duration: 0.2s;
+    transition-duration: 0.2s;
   }
-  
-  .mobile-nav-label {
-    font-size: 0.7rem;
-    margin-top: 4px;
+}
+
+/* Animation utilities based on screen size */
+.animate-on-desktop {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (min-width: 768px) {
+  .animate-on-desktop {
+    animation: initial !important;
+    transition: initial !important;
   }
+}
+
+/* Improved tap target feedback */
+.tap-highlight {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+}
+
+.no-tap-highlight {
+  -webkit-tap-highlight-color: transparent;
 }

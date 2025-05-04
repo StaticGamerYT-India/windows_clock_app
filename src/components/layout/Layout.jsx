@@ -12,6 +12,9 @@ const Layout = () => {
       setIsMobile(window.innerWidth < 768);
     };
     
+    // Set initial value
+    handleResize();
+    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -24,7 +27,7 @@ const Layout = () => {
         transition={{ duration: 0.5 }}
         className="bg-mica-dark shadow-md z-10"
       >
-        <Navbar isMobile={isMobile} />
+        <Navbar />
       </motion.header>
       
       <motion.main
@@ -32,6 +35,10 @@ const Layout = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
         className="flex-1 overflow-y-auto overflow-x-hidden relative px-3 md:px-6"
+        style={{ 
+          // Add padding at the bottom for mobile to account for the fixed nav bar
+          paddingBottom: isMobile ? "calc(1rem + 56px)" : "1rem" 
+        }}
       >
         {/* Background pattern to make the mica effect more visible */}
         <div className="fixed inset-0 opacity-5 z-0">
@@ -39,7 +46,7 @@ const Layout = () => {
           <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-blue-500 to-transparent opacity-5"></div>
         </div>
         
-        <div className="relative z-1 pb-16 md:pb-8">
+        <div className="relative z-1 py-4">
           <Outlet />
         </div>
       </motion.main>
