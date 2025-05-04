@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useFullFocusSession } from "../../store/useFullFocusSession";
 import Play from "../../assets/icons/Play";
 import Stop from "../../assets/icons/Stop";
@@ -7,79 +7,96 @@ import ThreeDots from "../../assets/icons/ThreeDots";
 import Check from "../../assets/icons/Check";
 import plant from "../../assets/images/plant.png";
 import { useDismissPopup } from "../../store/useDismissPopup";
+import FocusSessionBar from "./FocusSessionBar";
 
 const FocusSection = () => {
   const currentTimePeriod = useRef(0);
   const timer = useRef(null);
   const { focusSession, toggleStartFocusSession } = useFullFocusSession();
-  const { setShowDismiss, setShowTimeOnDismiss, setMainName, setName } =
-    useDismissPopup();
+  const { setShowDismiss, setShowTimeOnDismiss, setMainName, setName } = useDismissPopup();
+  
   // Ensure focusSession has data before accessing it
   const initialSecs = focusSession.length > 0 ? focusSession[currentTimePeriod.current] * 60 : 0;
   const [secs, setSecs] = useState(initialSecs);
   const [playing, setPlaying] = useState(true);
-
-  const [showOptions, setShowOptions] = useState(false); // Renamed state for clarity
+  const [showOptions, setShowOptions] = useState(false);
   const [showTime, setShowTime] = useState(true);
-
+  
+  // Properly calculate notification message
+  const showSessionCompleteNotification = useCallback(() => {
+    setPlaying(false);
+    setName("You have finished your focus session");
+    setMainName("Great job!");
+    setShowTimeOnDismiss(false);
+    setShowDismiss(true);
+  }, [setName, setMainName, setShowDismiss, setShowTimeOnDismiss]);
+  
+  // Reset timer if focusSession changes
   useEffect(() => {
-    // Reset timer if focusSession changes (e.g., going back and starting new session)
     if (focusSession.length > 0) {
       currentTimePeriod.current = 0;
       setSecs(focusSession[0] * 60);
-      setPlaying(true); // Auto-start new session
+      setPlaying(true);
     } else {
-      // Handle case where focusSession might become empty
       clearInterval(timer.current);
       setPlaying(false);
       setSecs(0);
     }
-  }, [focusSession]); // Depend on focusSession itself
+    
+    return () => clearInterval(timer.current);
+  }, [focusSession]);
 
+  // Handle timer countdown
   useEffect(() => {
-    if (playing && focusSession.length > 0) { // Check focusSession length
+    if (!playing || focusSession.length === 0) {
+      clearInterval(timer.current);
+      return;
+    }
+    
+    const startTimer = () => {
+      clearInterval(timer.current);
       timer.current = setInterval(() => {
-        setSecs((prev) => {
-          if (prev <= 1) { // Check for <= 1 to handle the last second correctly
-            clearInterval(timer.current); // Clear interval before potentially changing period
-            const nextPeriodIndex = currentTimePeriod.current + 1; // Use integer index
-
+        setSecs(prev => {
+          if (prev <= 1) {
+            clearInterval(timer.current);
+            const nextPeriodIndex = currentTimePeriod.current + 1;
+            
+            // If we've reached the end of the session
             if (nextPeriodIndex >= focusSession.length) {
-              // Session finished
-              setPlaying(false);
-              setName("You have finished your focus session");
-              setMainName("Great job!");
-              setShowTimeOnDismiss(false);
-              setShowDismiss();
-              return 0; // Stay at 0
-            } else {
-              // Move to next period
-              currentTimePeriod.current = nextPeriodIndex;
-              const nextDuration = focusSession[nextPeriodIndex] * 60;
-              // Restart interval immediately for the new period
-              if (playing) { // Check playing state again in case it was paused during transition
-                 timer.current = setInterval(() => {/*... interval logic ...*/}, 1000);
-              }
-              return nextDuration;
+              showSessionCompleteNotification();
+              return 0;
             }
-          } else {
-            return prev - 1;
+            
+            // Move to next period
+            currentTimePeriod.current = nextPeriodIndex;
+            const nextDuration = focusSession[nextPeriodIndex] * 60;
+            
+            // Show period transition notification
+            const isBreak = nextPeriodIndex % 2 !== 0;
+            setName(`Now starting ${isBreak ? 'break' : 'focus'} period`);
+            setMainName(isBreak ? "Take a break!" : "Time to focus!");
+            setShowTimeOnDismiss(true);
+            setShowDismiss(true);
+            
+            // Restart the timer
+            setTimeout(startTimer, 300);
+            return nextDuration;
           }
+          return prev - 1;
         });
       }, 1000);
-    } else {
-      clearInterval(timer.current);
-    }
-
+    };
+    
+    startTimer();
     return () => clearInterval(timer.current);
-  }, [playing, focusSession, setShowDismiss, setName, setMainName, setShowTimeOnDismiss]); // Added missing dependencies
+  }, [playing, focusSession, showSessionCompleteNotification, setName, setMainName, setShowDismiss, setShowTimeOnDismiss]);
 
-
+  // Timer display with improved visual feedback
   const timerDisplay = useMemo(() => {
     // Guard against accessing focusSession when empty or index out of bounds
     const currentDuration = focusSession.length > currentTimePeriod.current
                            ? focusSession[currentTimePeriod.current] * 60
-                           : 1; // Avoid division by zero
+                           : 1;
     const progressRatio = currentDuration > 0 ? (currentDuration - secs) / currentDuration : 0;
     const segmentsToShow = Math.floor(progressRatio * 24);
 
@@ -87,111 +104,129 @@ const FocusSection = () => {
     const displaySeconds = secs % 60;
 
     return (
-      // Adjusted size for responsiveness
-      <div className="flex items-center justify-center relative bg-[#3c3c3c] h-56 w-56 md:h-64 md:w-64 rounded-full border-[2px] border-[#414141]">
-        <span className="flex items-baseline text-5xl md:text-[40px] leading-tight md:leading-[45px]"> {/* Adjusted text size and alignment */}
+      <div className="flex items-center justify-center relative bg-[#3c3c3c] h-64 w-64 rounded-full border-2 border-[#414141] shadow-md">
+        <span className="flex items-baseline text-5xl leading-tight">
           {showTime ? (
             <>
               {displayMinutes > 0 ? (
                 <>
                   {displayMinutes}
-                  <p className="text-2xl text-[#b8b8b8] ml-1 md:ml-[5px]">min</p>
+                  <p className="text-2xl text-[#b8b8b8] ml-1">min</p>
                 </>
               ) : (
                 <>
                   {displaySeconds}
-                  <p className="text-2xl text-[#b8b8b8] ml-1 md:ml-[5px]">sec</p>
+                  <p className="text-2xl text-[#b8b8b8] ml-1">sec</p>
                 </>
               )}
             </>
           ) : (
-            <img src={plant} className="h-28 md:h-36" alt="Plant illustration"/> // Added alt text
+            <img src={plant} className="h-36" alt="Plant illustration" />
           )}
         </span>
-        {Array(24)
-          .fill(0)
-          .map((_, i) => (
-            <div
-              key={i}
-              // Adjusted size and translation for responsiveness
-              className={`absolute ${
-                i < segmentsToShow ? "bg-customColor-blue" : "bg-[#494949]"
-              } w-4 h-1 md:w-[22px] md:h-[6px] rounded-full`}
-              style={{ transform: `rotate(${i * 15}deg) translate(90px) md:translate(102px)` }} // Adjusted translate
-            ></div>
-          ))}
+        
+        {/* Timer segments showing progress */}
+        {Array(24).fill(0).map((_, i) => (
+          <div
+            key={i}
+            className={`absolute ${
+              i < segmentsToShow ? "bg-customColor-blue" : "bg-[#494949]"
+            } w-5 h-1.5 rounded-full transform`}
+            style={{ 
+              transform: `rotate(${i * 15}deg) translateX(100px)`,
+              transformOrigin: "center"
+            }}
+          ></div>
+        ))}
       </div>
     );
-  }, [secs, showTime, focusSession]); // Added focusSession dependency
+  }, [secs, showTime, focusSession]);
 
   // Determine current period type safely
   const currentPeriodType = focusSession.length > 0 && currentTimePeriod.current < focusSession.length
-                           ? (currentTimePeriod.current % 2 === 0 ? 'Focus' : 'Break')
-                           : 'Focus'; // Default or ending state
+                         ? (currentTimePeriod.current % 2 === 0 ? 'Focus' : 'Break')
+                         : 'Focus';
   const totalFocusPeriods = focusSession.length > 0 ? Math.ceil(focusSession.length / 2) : 0;
   const currentFocusPeriodNumber = focusSession.length > 0 ? Math.floor(currentTimePeriod.current / 2) + 1 : 0;
 
+  // Click outside handler for options menu
+  useEffect(() => {
+    if (!showOptions) return;
+    
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.options-menu') && !e.target.closest('.options-button')) {
+        setShowOptions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showOptions]);
 
   return (
-    // Adjusted padding, gap, max-width
-    <div className="focus-section">
-      <header className="flex w-full text-xl md:text-2xl font-semibold justify-center md:justify-start">
-         {currentPeriodType === 'Focus'
-           ? `Focus period (${currentFocusPeriodNumber} of ${totalFocusPeriods})`
-           : `Break`}
+    <div className="focus-section flex flex-col items-center gap-8 max-w-2xl mx-auto">
+      <header className="w-full">
+        <h1 className="text-2xl font-semibold text-center md:text-left">
+          {currentPeriodType === 'Focus'
+            ? `Focus period (${currentFocusPeriodNumber} of ${totalFocusPeriods})`
+            : `Break time`}
+        </h1>
+        
+        {/* Focus session progress bar */}
+        <div className="mt-4">
+          <FocusSessionBar currentPeriod={currentTimePeriod.current} />
+        </div>
       </header>
+      
       {timerDisplay}
-      {/* Adjusted gap and button padding */}
-      <div className="flex gap-3 md:gap-2 items-center justify-center w-full">
+      
+      <div className="flex gap-4 items-center justify-center w-full">
         <button
-          aria-label={playing ? "Pause session" : "Resume session"} // Added aria-label
-          className="bg-customColor-blue p-3 md:p-2 rounded-full hover:bg-[#68aada] transition-colors duration-150"
+          aria-label={playing ? "Pause session" : "Resume session"}
+          className="bg-customColor-blue p-3 rounded-full hover:bg-[#68aada] transition-colors duration-150 shadow-sm"
           onClick={() => {
             setPlaying((prev) => !prev);
-            setShowOptions(false); // Close options on play/pause
+            setShowOptions(false);
           }}
         >
-          {playing ? <Stop className="w-5 h-5 md:w-auto md:h-auto"/> : <Play className="w-5 h-5 md:w-auto md:h-auto"/>} {/* Scaled icons */}
+          {playing ? <Stop className="w-6 h-6"/> : <Play className="w-6 h-6"/>}
         </button>
-        {/* Show GoBack only when paused */}
+        
         {!playing && (
           <button
-            aria-label="Go back to session setup" // Added aria-label
+            aria-label="Go back to session setup"
             onClick={() => {
-              toggleStartFocusSession(); // This should reset the session state via zustand
+              toggleStartFocusSession();
               setShowOptions(false);
             }}
-            className="bg-[#3e3e3e] p-2.5 md:p-[7.5px] rounded-full border-[1px] border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150" // Added hover state
+            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-sm"
           >
-            <GoBack className="w-5 h-5 md:w-auto md:h-auto"/> {/* Scaled icon */}
+            <GoBack className="w-6 h-6"/>
           </button>
         )}
+        
         <div className="relative">
-          {/* Options Menu */}
+          {/* Options menu with improved positioning and interaction */}
           {showOptions && (
-            <div className="absolute bottom-full mb-2 right-0 md:right-auto md:left-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10">
+            <div className="absolute bottom-full mb-3 right-0 md:left-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10 options-menu min-w-[200px]">
               <button
-                onClick={() => {
-                  setShowTime((prev) => !prev);
-                  // setShowOptions(false); // Optionally close menu on selection
-                }}
-                className="flex items-center w-full text-left p-2 px-4 text-sm hover:bg-[#3b3b3b] rounded-t-lg" // Adjusted style
+                onClick={() => setShowTime((prev) => !prev)}
+                className="flex items-center w-full text-left p-3 text-sm hover:bg-[#3b3b3b] rounded-t-lg transition-colors"
               >
-                <div className="flex items-center justify-center w-6 h-6 mr-2"> {/* Checkbox area */}
+                <div className="flex items-center justify-center w-6 h-6 mr-2">
                   {showTime && <Check className="w-4 h-4"/>}
                 </div>
                 Show time remaining
               </button>
-               {/* Add more options here if needed */}
             </div>
           )}
-          {/* Three Dots Button */}
+          
           <button
-            aria-label="More options" // Added aria-label
+            aria-label="More options"
             onClick={() => setShowOptions((prev) => !prev)}
-            className="bg-[#3e3e3e] p-2.5 md:p-[7.5px] rounded-full border-[1px] border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150" // Added hover state
+            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-sm options-button"
           >
-            <ThreeDots className="w-5 h-5 md:w-auto md:h-auto"/> {/* Scaled icon */}
+            <ThreeDots className="w-6 h-6"/>
           </button>
         </div>
       </div>

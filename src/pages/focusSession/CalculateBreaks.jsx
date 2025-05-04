@@ -7,7 +7,7 @@ import { useFullFocusSession } from "../../store/useFullFocusSession";
 import FocusSessionBar from "./FocusSessionBar";
 
 const CalculateBreaks = () => {
-  const [check, setCheck] = useState(false); // State for "Skip breaks" checkbox
+  const [check, setCheck] = useState(false);
   const [breaksAm, setBreaksAm] = useState(0);
   const { setFocusSession } = useFullFocusSession();
   const { session } = useSession();
@@ -17,22 +17,34 @@ const CalculateBreaks = () => {
     const { focusAr, breakAr } = calculateBreaks(session, check);
     setBreaksAm(breakAr.length);
     setFocusSession(mergeArrays(focusAr, breakAr));
-  }, [session, check, setFocusSession]); // Added setFocusSession to dependency array
+  }, [session, check, setFocusSession]);
 
   return (
-    // Adjusted gap and width
-    <div className="flex flex-col gap-3 md:gap-4 items-center justify-center w-full mt-2 md:mt-0">
-      {/* Adjusted text size */}
-      <span className="text-lg md:text-xl">
-        You'll have {!check && breaksAm > 0 ? breaksAm : "no"} break{(!check && breaksAm === 1) ? '' : 's'} {/* Correct pluralization */}
-      </span>
-      {/* Adjusted gap and text size */}
-      <div className="flex items-center gap-2 mb-1 md:mb-2">
-        <CheckBox check={check} setCheck={setCheck} />
-        <span className="flex items-center justify-center text-sm md:text-base">Skip breaks</span>
+    <div className="flex flex-col gap-5 items-center w-full max-w-[600px] mt-4 bg-[#2a2a2a] p-5 rounded-lg shadow-sm">
+      <div className="text-center">
+        <span className="text-xl font-medium">
+          {!check && breaksAm > 0 ? (
+            <>
+              You'll have <span className="text-customColor-blue">{breaksAm}</span> break{breaksAm !== 1 && 's'}
+            </>
+          ) : (
+            <span className="text-[#ff9898]">No breaks scheduled</span>
+          )}
+        </span>
+        
+        <div className="flex items-center justify-center gap-2 mt-3">
+          <CheckBox check={check} setCheck={setCheck} />
+          <span className="text-base">Skip breaks</span>
+        </div>
       </div>
-      {/* Ensure FocusSessionBar is also responsive if needed (it seems okay based on its code) */}
-      <FocusSessionBar/>
+      
+      <div className="w-full mt-2">
+        <div className="mb-2 text-sm text-[#b0b0b0] flex justify-between">
+          <span>Session breakdown:</span>
+          <span>{times[session.focus]} minutes total</span>
+        </div>
+        <FocusSessionBar />
+      </div>
     </div>
   );
 };

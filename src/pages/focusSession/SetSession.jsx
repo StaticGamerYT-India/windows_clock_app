@@ -6,29 +6,35 @@ import Play from "../../assets/icons/Play";
 
 const SetSession = () => {
   const { toggleStartFocusSession } = useFullFocusSession();
+  
   return (
-    <div className="set-session">
-      <header className="flex justify-center items-center w-full p-1 md:p-2">
-        <h1 className="text-2xl md:text-3xl font-medium text-center">Get ready to focus</h1>
+    <div className="set-session flex flex-col items-center gap-8 py-4">
+      <header className="w-full text-center">
+        <h1 className="text-3xl font-medium mb-1">Get ready to focus</h1>
+        <p className="text-[#a0a0a0]">Set your focus and break durations</p>
       </header>
-      <div className="flex flex-col md:flex-row w-full justify-center items-center md:items-start gap-4 md:gap-5">
-        <div className="flex flex-col items-center gap-1">
+      
+      <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6 md:gap-8 w-full">
+        <div className="flex flex-col items-center gap-2">
           <SetTime unit="focus" />
-          <p className="text-[#c9c9c9] font-medium">Focus</p>
+          <p className="text-[#c9c9c9] font-medium">Focus time</p>
         </div>
-        <div className="flex flex-col items-center gap-1">
+        
+        <div className="flex flex-col items-center gap-2">
           <SetTime unit="breaks" />
-          <p className="text-[#c9c9c9] font-medium">Break</p>
+          <p className="text-[#c9c9c9] font-medium">Break time</p>
         </div>
       </div>
+      
       <CalculateBreaks />
-      <div className="flex w-full items-center justify-center mt-2 md:mt-4">
+      
+      <div className="w-full flex justify-center mt-2">
         <button
           onClick={toggleStartFocusSession}
           type="button"
-          className="flex justify-center items-center gap-2 md:gap-[10px] bg-customColor-blue px-5 py-2.5 md:px-3 md:py-[5px] rounded-[5px] text-black font-medium hover:bg-[#68a8d6] transition-colors duration-150 text-base md:text-sm"
+          className="flex justify-center items-center gap-3 bg-customColor-blue px-6 py-3 rounded-md text-black font-medium hover:bg-[#68a8d6] transition-all duration-200 transform hover:scale-105 shadow-md"
         >
-          <Play className="w-5 h-5 md:w-auto md:h-auto" />
+          <Play className="w-5 h-5" />
           Start focus session
         </button>
       </div>

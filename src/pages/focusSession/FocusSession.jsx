@@ -8,8 +8,12 @@ const FocusSession = () => {
   const { startFocusSession } = useFullFocusSession();
   
   return (
-    <div className="overflow-y-auto h-screen flex-grow py-[40px] px-[50px] relative bg-mica-dark backdrop-blur-mica">
-      {startFocusSession ? <FocusSection /> : <SetSession />}
+    <div className="h-screen flex flex-col bg-mica-dark backdrop-blur-mica">
+      <div className="flex-grow overflow-auto py-6 px-4 md:py-10 md:px-8 lg:px-12 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+        <div className="max-w-4xl mx-auto">
+          {startFocusSession ? <FocusSection /> : <SetSession />}
+        </div>
+      </div>
       <DismissPopup />
     </div>
   );
