@@ -14,9 +14,28 @@ export default {
       },
       colors: {
         customColor: {
-          blue: "#73baed", 
-        },
-        'customColor-blue': '#4CC2FF',
+          blue: "#3a9fe0",
+          green: "#16cca2",
+          darkBg: "#202020",
+          darkCard: "#2a2a2a",
+          darkInput: "#3a3a3a",
+          darkBtn: "#3e3e3e",
+          darkBorder: "#4a4a4a",
+        }
+      },
+      fontFamily: {
+        sans: [
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          'Segoe UI', 
+          'Roboto', 
+          'Oxygen', 
+          'Ubuntu', 
+          'Cantarell', 
+          'Open Sans', 
+          'Helvetica Neue', 
+          'sans-serif'
+        ]
       },
       backdropBlur: {
         'xl': '40px', // Example blur intensity
@@ -24,9 +43,14 @@ export default {
       },
       boxShadow: {
         'win11': '0 2px 8px 0 rgba(0, 0, 0, 0.2)',
+        'mica': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'card': '0 2px 5px rgba(0, 0, 0, 0.15)',
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'spin-slow': 'spin 3s linear infinite',
+        'bounce-subtle': 'bounce 2s infinite',
       },
     },
   },
