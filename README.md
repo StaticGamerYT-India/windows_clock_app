@@ -1,49 +1,62 @@
 # Windows Clock App
 
-A modern Windows-inspired clock application built with React featuring multiple functionalities including:
-
-- **Stopwatch**: Accurate time tracking with lap functionality
-- **Timer**: Customizable countdown timer
-- **Alarm**: Set and manage multiple alarms
-- **Focus Session**: Productivity timer with customizable sessions, inspired by the Pomodoro Technique
-- **World Time**: Track time across different time zones
+A modern clock application inspired by the Windows Clock app, built with React and Tailwind CSS.
 
 ## Features
 
-- **Modern UI Design**: Inspired by Windows 11 Fluent Design with the Mica blur effect
-- **Smooth Animations**: Polished transitions and microinteractions
-- **Fully Responsive**: Works on mobile, tablet, and desktop devices
-- **Focus Session Tools**: 
-  - Create custom focus/break schedules
-  - Add tasks to focus on
-  - Track statistics and progress
-  - Ambient sounds for improved concentration
-  - Theme customization
-
-## Tech Stack
-
-- **React**: Frontend library
-- **React Router**: For navigation
-- **Framer Motion**: For smooth animations
-- **Tailwind CSS**: For styling
-- **Zustand**: State management
-- **Vite**: Build tool
+- Stopwatch with lap functionality
+- Timer with multiple presets
+- Alarm settings
+- World clock for different time zones
+- Focus session with customizable durations
+- Responsive design for mobile and desktop
 
 ## Getting Started
 
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
 1. Clone the repository
-2. Install dependencies:
-   ```
-   npm install
-   ```
-3. Start the development server:
-   ```
-   npm run dev
-   ```
-4. Build for production:
-   ```
-   npm run build
-   ```
+```bash
+git clone https://github.com/StaticGamerYT-India/windows_clock_app.git
+cd windows_clock_app
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Start the development server
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+4. Open http://localhost:3000 to view the app in your browser
+
+## Mobile Optimization
+
+The app is fully optimized for mobile devices with:
+- Touch-friendly controls
+- Bottom navigation for easy access
+- Safe area insets for notched phones
+- Optimized layout for different screen sizes
+
+## Technologies Used
+
+- React.js
+- React Router
+- Framer Motion for animations
+- Tailwind CSS for styling
+- Zustand for state management
 
 ## License
 

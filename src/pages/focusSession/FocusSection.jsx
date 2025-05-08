@@ -129,8 +129,8 @@ const FocusSection = () => {
     const displaySeconds = secs % 60;
 
     return (
-      <div className={`flex items-center justify-center relative bg-[#3c3c3c] rounded-full border-2 border-[#414141] shadow-md ${isMobile ? 'h-36 w-36' : 'h-48 w-48 md:h-64 md:w-64'}`}>
-        <span className="flex items-baseline text-3xl md:text-5xl leading-tight">
+      <div className={`flex items-center justify-center relative bg-[#3c3c3c] rounded-full border-2 border-[#414141] shadow-md timer-display-mobile ${isMobile ? 'h-36 w-36' : 'h-48 w-48 md:h-64 md:w-64'}`}>
+        <span className="flex items-baseline text-3xl md:text-5xl leading-tight timer-text-mobile">
           {showTime ? (
             <>
               {displayMinutes > 0 ? (
@@ -228,7 +228,7 @@ const FocusSection = () => {
       </motion.div>
       
       <motion.div 
-        className="flex gap-4 items-center justify-center w-full"
+        className="flex gap-4 items-center justify-center w-full control-buttons-mobile"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.3 }}
@@ -237,7 +237,7 @@ const FocusSection = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           aria-label={playing ? "Pause session" : "Resume session"}
-          className="bg-customColor-blue p-3 md:p-4 rounded-full hover:bg-[#68aada] transition-colors shadow-md"
+          className="bg-customColor-blue p-3 md:p-4 rounded-full hover:bg-[#68aada] transition-colors shadow-md tap-target tap-highlight"
           style={{ touchAction: "manipulation" }}
           onClick={() => {
             setPlaying((prev) => !prev);
@@ -261,7 +261,7 @@ const FocusSection = () => {
                 setShowOptions(false);
               }}
               style={{ touchAction: "manipulation" }}
-              className="bg-[#3e3e3e] p-3 md:p-4 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors shadow-md"
+              className="bg-[#3e3e3e] p-3 md:p-4 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors shadow-md tap-target"
             >
               <GoBack className="w-5 h-5 md:w-6 md:h-6"/>
             </motion.button>
@@ -277,7 +277,7 @@ const FocusSection = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-full mb-3 right-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10 options-menu min-w-[180px]"
+                className="absolute bottom-full mb-3 right-0 md:left-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10 options-menu min-w-[180px]"
               >
                 <button
                   onClick={() => setShowTime((prev) => !prev)}
@@ -299,7 +299,7 @@ const FocusSection = () => {
             aria-label="More options"
             onClick={() => setShowOptions((prev) => !prev)}
             style={{ touchAction: "manipulation" }}
-            className="bg-[#3e3e3e] p-3 md:p-4 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors shadow-md options-button"
+            className="bg-[#3e3e3e] p-3 md:p-4 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors shadow-md options-button tap-target"
           >
             <ThreeDots className="w-5 h-5 md:w-6 md:h-6"/>
           </motion.button>

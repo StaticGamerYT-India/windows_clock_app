@@ -24,6 +24,8 @@ export default {
           darkInput: "#3a3a3a",
           darkBtn: "#3e3e3e",
           darkBorder: "#4a4a4a",
+          red: '#e15a5a',
+          yellow: '#e1c75a',
         }
       },
       fontFamily: {

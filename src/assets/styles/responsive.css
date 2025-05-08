@@ -122,8 +122,8 @@
   
   /* Timer display adjustments */
   .timer-display-mobile {
-    height: 180px !important;
-    width: 180px !important;
+    height: 10rem !important;
+    width: 10rem !important;
   }
   
   /* Task controls layout adjustment */
@@ -134,7 +134,7 @@
   
   /* Smaller timer text on mobile */
   .timer-text-mobile {
-    font-size: 2.5rem !important;
+    font-size: 1.75rem !important;
   }
   
   /* Adjusted control buttons */
@@ -156,6 +156,31 @@
   .reduced-animation {
     animation-duration: 0.3s !important;
     transition-duration: 0.3s !important;
+  }
+  
+  input, 
+  select, 
+  textarea, 
+  button {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+  
+  /* Increase spacing between items on mobile */
+  .mobile-spacing > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Ensure buttons have proper tap targets */
+  button, 
+  .tap-target,
+  a.tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Mobile navigation adjustments */
+  .mobile-nav {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 }
 
@@ -219,4 +244,11 @@
 
 .no-tap-highlight {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-container {
+    max-width: 90%;
+  }
 }

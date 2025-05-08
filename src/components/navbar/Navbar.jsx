@@ -93,7 +93,7 @@ const Navbar = () => {
       
       {/* Bottom navbar for mobile */}
       {isMobile && (
-        <div className="fixed bottom-0 left-0 right-0 bg-[#202020] shadow-lg border-t border-[#333] z-40">
+        <div className="fixed bottom-0 left-0 right-0 bg-[#202020] shadow-lg border-t border-[#333] z-40 safe-bottom">
           <div className="flex justify-around py-2">
             {navItems.map((item) => {
               const isActive = item.path === "/" 
@@ -104,7 +104,7 @@ const Navbar = () => {
                 <Link 
                   key={item.path}
                   to={item.path} 
-                  className="flex flex-col items-center p-2"
+                  className="flex flex-col items-center p-2 tap-target"
                 >
                   <item.icon className={`w-6 h-6 ${isActive ? 'text-customColor-blue' : 'text-gray-400'}`} />
                   <span className={`text-xs mt-1 ${isActive ? 'text-white' : 'text-gray-400'}`}>
