@@ -23,6 +23,17 @@ const FocusSection = () => {
   const [playing, setPlaying] = useState(true);
   const [showOptions, setShowOptions] = useState(false);
   const [showTime, setShowTime] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  
+  // Handle responsive layout
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Properly calculate notification message with rate limiting
   const showSessionCompleteNotification = useCallback(() => {
@@ -118,24 +129,24 @@ const FocusSection = () => {
     const displaySeconds = secs % 60;
 
     return (
-      <div className="flex items-center justify-center relative bg-[#3c3c3c] h-48 w-48 md:h-64 md:w-64 rounded-full border-2 border-[#414141] shadow-md timer-display-mobile">
-        <span className="flex items-baseline text-4xl md:text-5xl leading-tight timer-text-mobile">
+      <div className={`flex items-center justify-center relative bg-[#3c3c3c] rounded-full border-2 border-[#414141] shadow-md ${isMobile ? 'h-36 w-36' : 'h-48 w-48 md:h-64 md:w-64'}`}>
+        <span className="flex items-baseline text-3xl md:text-5xl leading-tight">
           {showTime ? (
             <>
               {displayMinutes > 0 ? (
                 <>
                   {displayMinutes}
-                  <p className="text-2xl text-[#b8b8b8] ml-1">min</p>
+                  <p className="text-lg md:text-2xl text-[#b8b8b8] ml-1">min</p>
                 </>
               ) : (
                 <>
                   {displaySeconds}
-                  <p className="text-2xl text-[#b8b8b8] ml-1">sec</p>
+                  <p className="text-lg md:text-2xl text-[#b8b8b8] ml-1">sec</p>
                 </>
               )}
             </>
           ) : (
-            <img src={plant} className="h-36" alt="Plant illustration" />
+            <img src={plant} className={`${isMobile ? 'h-24' : 'h-36'}`} alt="Plant illustration" />
           )}
         </span>
         
@@ -145,16 +156,16 @@ const FocusSection = () => {
             key={i}
             className={`absolute ${
               i < segmentsToShow ? "bg-customColor-blue" : "bg-[#494949]"
-            } w-5 h-1.5 rounded-full`}
+            } w-1.5 md:w-2 h-1 md:h-1.5 rounded-full`}
             style={{ 
-              transform: `rotate(${i * 15}deg) translateX(100px)`,
+              transform: `rotate(${i * 15}deg) translateX(${isMobile ? '65px' : '100px'})`,
               transformOrigin: "center"
             }}
           ></div>
         ))}
       </div>
     );
-  }, [secs, showTime, focusSession]);
+  }, [secs, showTime, focusSession, isMobile]);
 
   // Determine current period type safely
   const currentPeriodType = focusSession.length > 0 && currentTimePeriod.current < focusSession.length
@@ -179,7 +190,7 @@ const FocusSection = () => {
 
   return (
     <motion.div 
-      className="focus-section flex flex-col items-center gap-5 md:gap-8 max-w-2xl mx-auto px-3 md:px-6"
+      className="focus-section flex flex-col items-center gap-4 md:gap-8 max-w-2xl mx-auto px-2 md:px-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -190,7 +201,7 @@ const FocusSection = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.3 }}
       >
-        <h1 className="text-xl md:text-2xl font-semibold text-center md:text-left">
+        <h1 className="text-lg md:text-2xl font-semibold text-center">
           {currentPeriodType === 'Focus'
             ? `Focus period (${currentFocusPeriodNumber} of ${totalFocusPeriods})`
             : `Break time`}
@@ -198,7 +209,7 @@ const FocusSection = () => {
         
         {/* Focus session progress bar */}
         <motion.div 
-          className="mt-4"
+          className="mt-3 md:mt-4"
           initial={{ scaleX: 0.9, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
@@ -217,22 +228,23 @@ const FocusSection = () => {
       </motion.div>
       
       <motion.div 
-        className="flex gap-4 items-center justify-center w-full control-buttons-mobile"
+        className="flex gap-4 items-center justify-center w-full"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.3 }}
       >
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           aria-label={playing ? "Pause session" : "Resume session"}
-          className="bg-customColor-blue p-3 rounded-full hover:bg-[#68aada] transition-colors duration-150 shadow-md tap-target tap-highlight"
+          className="bg-customColor-blue p-3 md:p-4 rounded-full hover:bg-[#68aada] transition-colors shadow-md"
+          style={{ touchAction: "manipulation" }}
           onClick={() => {
             setPlaying((prev) => !prev);
             setShowOptions(false);
           }}
         >
-          {playing ? <Stop className="w-6 h-6"/> : <Play className="w-6 h-6"/>}
+          {playing ? <Stop className="w-5 h-5 md:w-6 md:h-6"/> : <Play className="w-5 h-5 md:w-6 md:h-6"/>}
         </motion.button>
         
         <AnimatePresence>
@@ -241,16 +253,17 @@ const FocusSection = () => {
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Go back to session setup"
               onClick={() => {
                 toggleStartFocusSession();
                 setShowOptions(false);
               }}
-              className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-md"
+              style={{ touchAction: "manipulation" }}
+              className="bg-[#3e3e3e] p-3 md:p-4 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors shadow-md"
             >
-              <GoBack className="w-6 h-6"/>
+              <GoBack className="w-5 h-5 md:w-6 md:h-6"/>
             </motion.button>
           )}
         </AnimatePresence>
@@ -264,11 +277,12 @@ const FocusSection = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-full mb-3 right-0 md:left-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10 options-menu min-w-[200px]"
+                className="absolute bottom-full mb-3 right-0 flex flex-col items-start bg-[#2e2e2e] rounded-lg border border-[#252525] shadow-lg z-10 options-menu min-w-[180px]"
               >
                 <button
                   onClick={() => setShowTime((prev) => !prev)}
-                  className="flex items-center w-full text-left p-3 text-sm hover:bg-[#3b3b3b] rounded-t-lg transition-colors"
+                  className="flex items-center w-full text-left p-3 text-sm hover:bg-[#3b3b3b] rounded-lg transition-colors"
+                  style={{ minHeight: "44px", touchAction: "manipulation" }}
                 >
                   <div className="flex items-center justify-center w-6 h-6 mr-2">
                     {showTime && <Check className="w-4 h-4"/>}
@@ -280,13 +294,14 @@ const FocusSection = () => {
           </AnimatePresence>
           
           <motion.button
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="More options"
             onClick={() => setShowOptions((prev) => !prev)}
-            className="bg-[#3e3e3e] p-3 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors duration-150 shadow-md options-button"
+            style={{ touchAction: "manipulation" }}
+            className="bg-[#3e3e3e] p-3 md:p-4 rounded-full border border-[#494949] hover:bg-[#4f4f4f] transition-colors shadow-md options-button"
           >
-            <ThreeDots className="w-6 h-6"/>
+            <ThreeDots className="w-5 h-5 md:w-6 md:h-6"/>
           </motion.button>
         </div>
       </motion.div>

@@ -11,6 +11,17 @@ import { motion, AnimatePresence } from "framer-motion";
 const FocusSession = () => {
   const [activeTab, setActiveTab] = useState("setup");
   const { startFocusSession } = useFullFocusSession();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  
+  // Handle responsive layout
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Add a fade-in effect when component mounts
   useEffect(() => {
@@ -23,88 +34,36 @@ const FocusSession = () => {
     
     return (
       <motion.div 
-        className="border-b border-[#333] mb-6"
+        className="border-b border-[#333] mb-4 md:mb-6"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="flex">
-          <button
-            onClick={() => setActiveTab("setup")}
-            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
-              activeTab === "setup" 
-                ? "text-white" 
-                : "text-[#a0a0a0] hover:text-white"
-            }`}
-          >
-            Setup
-            {activeTab === "setup" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
-                layoutId="activeTabIndicator"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("tasks")}
-            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
-              activeTab === "tasks" 
-                ? "text-white" 
-                : "text-[#a0a0a0] hover:text-white"
-            }`}
-          >
-            Tasks
-            {activeTab === "tasks" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
-                layoutId="activeTabIndicator"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("environment")}
-            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
-              activeTab === "environment" 
-                ? "text-white" 
-                : "text-[#a0a0a0] hover:text-white"
-            }`}
-          >
-            Environment
-            {activeTab === "environment" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
-                layoutId="activeTabIndicator"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("stats")}
-            className={`px-4 py-2 font-medium transition-all duration-200 relative ${
-              activeTab === "stats" 
-                ? "text-white" 
-                : "text-[#a0a0a0] hover:text-white"
-            }`}
-          >
-            Stats
-            {activeTab === "stats" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
-                layoutId="activeTabIndicator"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            )}
-          </button>
+        <div className={`flex ${isMobile ? 'overflow-x-auto' : ''}`}>
+          {/* Use overflow-x-auto for mobile to allow horizontal scrolling */}
+          {['setup', 'tasks', 'environment', 'stats'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 font-medium transition-all duration-200 relative whitespace-nowrap ${
+                activeTab === tab 
+                  ? "text-white" 
+                  : "text-[#a0a0a0] hover:text-white"
+              }`}
+              style={{ touchAction: "manipulation", minHeight: "44px" }}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {activeTab === tab && (
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-customColor-blue"
+                  layoutId="activeTabIndicator"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+            </button>
+          ))}
         </div>
       </motion.div>
     );
@@ -139,7 +98,7 @@ const FocusSession = () => {
   };
 
   return (
-    <div className="focus-session-container py-4 md:p-6 max-w-4xl mx-auto">
+    <div className="focus-session-container py-3 md:py-4 md:p-6 max-w-4xl mx-auto">
       {renderTabs()}
       {renderContent()}
     </div>

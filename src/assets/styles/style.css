@@ -20,16 +20,21 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #999999;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .sidebar_comp {
@@ -139,4 +144,90 @@ body {
   @apply flex flex-col gap-4 md:gap-5 bg-mica-component rounded-[6px] p-4 md:px-5 md:pt-3 md:pb-7 border border-[#252525] shadow select-none w-full max-w-md mx-auto;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+/* Improved touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+button, 
+a, 
+input[type="checkbox"],
+input[type="radio"],
+.tap-target {
+  touch-action: manipulation;
+}
+
+/* Prevent text selection during touch */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Prevent pull-to-refresh on mobile */
+html, body {
+  overscroll-behavior-y: contain;
+}
+
+/* Better focus states for keyboard navigation */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3a9fe0;
+  outline-offset: 2px;
+}
+
+/* Fix iOS tap highlight color */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Improved mobile styling */
+@media (max-width: 767px) {
+  input, 
+  select, 
+  textarea, 
+  button {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+  
+  /* Increase spacing between items on mobile */
+  .mobile-spacing > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Fix fixed positioning on mobile browsers */
+  .fixed-mobile {
+    position: fixed;
+    width: 100%;
+    z-index: 40;
+  }
+}
+
+/* Animations optimized for better performance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Safe area insets for modern mobile devices */
+@supports (padding: max(0px)) {
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  .safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
 }

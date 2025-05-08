@@ -34,182 +34,96 @@ const WorldIcon = ({ className }) => (
 
 const BrainIcon = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path>
-    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path>
-  </svg>
-);
-
-const MenuIcon = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
+    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44"></path>
+    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44"></path>
+    <path d="M4.5 7h2a2.5 2.5 0 0 1 0 5h-2"></path>
+    <path d="M19.5 7h-2a2.5 2.5 0 0 0 0 5h2"></path>
+    <path d="M4.5 12h2a2.5 2.5 0 0 1 0 5h-2"></path>
+    <path d="M19.5 12h-2a2.5 2.5 0 0 0 0 5h2"></path>
   </svg>
 );
 
 const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const location = useLocation();
-  const pathname = location.pathname;
+  const [time, setTime] = useState(new Date());
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // Handle responsive state changes
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Handle responsive layout
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (!mobile) setIsMobileMenuOpen(false);
+      setIsMobile(window.innerWidth < 768);
     };
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Format time
+  const formattedTime = time.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: true 
+  });
+
   // Navigation items
   const navItems = [
-    { path: "/", label: "Stopwatch", icon: (props) => <ClockIcon {...props} /> },
-    { path: "/timer", label: "Timer", icon: (props) => <TimerIcon {...props} /> },
-    { path: "/alarm", label: "Alarm", icon: (props) => <AlarmIcon {...props} /> },
-    { path: "/world-time", label: "World Clock", icon: (props) => <WorldIcon {...props} /> },
-    { path: "/focus-session", label: "Focus Session", icon: (props) => <BrainIcon {...props} /> }
+    { path: "/", icon: ClockIcon, label: "Stopwatch" },
+    { path: "/timer", icon: TimerIcon, label: "Timer" },
+    { path: "/alarm", icon: AlarmIcon, label: "Alarm" },
+    { path: "/world-time", icon: WorldIcon, label: "World" },
+    { path: "/focus-session", icon: BrainIcon, label: "Focus" }
   ];
-
-  // Get the title for the current page
-  const getPageTitle = () => {
-    const currentItem = navItems.find(item => {
-      if (item.path === '/') return pathname === '/';
-      return pathname.includes(item.path);
-    });
-    return currentItem?.label || 'Clock';
-  };
 
   return (
     <>
-      {/* Main navbar */}
-      <nav className="px-4 py-2 flex items-center justify-between relative z-20">
-        <div className="flex items-center">
-          {isMobile && (
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="touch-manipulation mr-3 p-2 -ml-2 rounded-full hover:bg-[#3a3a3a] transition-colors active:bg-[#4a4a4a]"
-              aria-label="Toggle menu"
-            >
-              <MenuIcon className="w-5 h-5" />
-            </button>
-          )}
-          <h1 className="text-xl font-medium">{getPageTitle()}</h1>
-        </div>
-        
-        {!isMobile && (
-          <div className="flex items-center space-x-1">
+      {/* Top navbar for desktop */}
+      <div className="hidden md:flex justify-between items-center px-6 py-3">
+        <div className="text-lg font-medium">Windows Clock</div>
+        <div className="text-xl font-light">{formattedTime}</div>
+      </div>
+      
+      {/* Bottom navbar for mobile */}
+      {isMobile && (
+        <div className="fixed bottom-0 left-0 right-0 bg-[#202020] shadow-lg border-t border-[#333] z-40">
+          <div className="flex justify-around py-2">
             {navItems.map((item) => {
               const isActive = item.path === "/" 
-                ? pathname === "/" 
-                : pathname.includes(item.path);
+                ? location.pathname === "/" 
+                : location.pathname.includes(item.path);
               
               return (
-                <Link
+                <Link 
                   key={item.path}
-                  to={item.path}
-                  className={`px-4 py-2 rounded-md flex items-center gap-2 transition-colors duration-200 ${
-                    isActive 
-                      ? "bg-[#3a3a3a]" 
-                      : "hover:bg-[#2a2a2a]"
-                  }`}
+                  to={item.path} 
+                  className="flex flex-col items-center p-2"
                 >
-                  {item.icon({ className: "w-5 h-5" })}
-                  <span className="text-sm">{item.label}</span>
+                  <item.icon className={`w-6 h-6 ${isActive ? 'text-customColor-blue' : 'text-gray-400'}`} />
+                  <span className={`text-xs mt-1 ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                    {item.label}
+                  </span>
+                  {isActive && (
+                    <motion.div 
+                      layoutId="nav-indicator"
+                      className="absolute bottom-0 h-0.5 w-12 bg-customColor-blue"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
                 </Link>
               );
             })}
           </div>
-        )}
-      </nav>
-      
-      {/* Mobile menu overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-10"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-      
-      {/* Mobile slide-in menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ x: "-100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-0 left-0 h-full w-[75%] max-w-[280px] bg-[#1e1e1e] z-30 shadow-lg"
-          >
-            <div className="flex flex-col h-full">
-              <div className="p-4 border-b border-[#333]">
-                <h2 className="text-xl font-medium">Windows Clock</h2>
-              </div>
-              
-              <nav className="flex-1 p-2">
-                {navItems.map((item) => {
-                  const isActive = item.path === "/" 
-                    ? pathname === "/" 
-                    : pathname.includes(item.path);
-                  
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`touch-manipulation flex items-center gap-3 px-4 py-3 mb-1 rounded-md transition-colors ${
-                        isActive 
-                          ? "bg-[#2a2a2a] text-customColor-blue" 
-                          : "hover:bg-[#232323]"
-                      }`}
-                    >
-                      {item.icon({ className: "w-6 h-6" })}
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </nav>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      {/* Mobile bottom navigation - an alternative way to navigate */}
-      {isMobile && (
-        <motion.div 
-          initial={{ y: 80 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.5, duration: 0.4, ease: "easeOut" }}
-          className="fixed bottom-0 left-0 right-0 h-14 bg-[#1a1a1a]/95 backdrop-blur-md border-t border-[#333] flex justify-around items-center px-1 z-10"
-        >
-          {navItems.map((item) => {
-            const isActive = item.path === "/" 
-              ? pathname === "/" 
-              : pathname.includes(item.path);
-            
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="touch-manipulation flex flex-col items-center justify-center text-center w-full h-full"
-              >
-                <div className={`flex flex-col items-center transition-all ${isActive ? "text-customColor-blue" : "text-[#aaa]"}`}>
-                  {item.icon({ className: "w-5 h-5 mb-1" })}
-                  <span className="text-[10px]">{item.label}</span>
-                </div>
-              </Link>
-            );
-          })}
-        </motion.div>
+        </div>
       )}
     </>
   );

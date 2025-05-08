@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="./src/assets/images/clock.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#202020" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Windows Clock</title>
     <style>
       :root {
@@ -17,10 +20,26 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         overflow: hidden;
         min-height: 100vh;
+        min-height: -webkit-fill-available;
+        /* Prevent pull-to-refresh */
+        overscroll-behavior-y: contain;
+        /* Prevent text selection */
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      
+      html {
+        height: -webkit-fill-available;
+      }
+      
+      /* Fix iOS tap highlight */
+      * {
+        -webkit-tap-highlight-color: transparent;
       }
       
       #root {
         min-height: 100vh;
+        min-height: -webkit-fill-available;
         height: 100%;
       }
       
@@ -97,6 +116,28 @@
         opacity: 0;
         transition: opacity 300ms;
       }
+      
+      /* Optimize for reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      
+      /* Safe area insets for mobile */
+      @supports (padding: max(0px)) {
+        /* Safe area for notched phones */
+        .safe-area-bottom {
+          padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+        
+        .safe-area-top {
+          padding-top: max(1rem, env(safe-area-inset-top));
+        }
+      }
     </style>
   </head>
   <body>
@@ -118,6 +159,21 @@
           }
         }, 800);
       });
+      
+      // Fix iOS height issue
+      const appHeight = () => {
+        const doc = document.documentElement;
+        doc.style.setProperty('--app-height', `${window.innerHeight}px`);
+      }
+      window.addEventListener('resize', appHeight);
+      appHeight();
+      
+      // Prevent default touch behavior
+      document.addEventListener('touchmove', function(e) {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      }, { passive: false });
     </script>
   </body>
 </html>

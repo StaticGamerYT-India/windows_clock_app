@@ -20,11 +20,11 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#1a1a1a]">
       <motion.header
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
         className="bg-mica-dark shadow-md z-10"
       >
         <Navbar />
@@ -33,20 +33,20 @@ const Layout = () => {
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
+        transition={{ delay: 0.2, duration: 0.4 }}
         className="flex-1 overflow-y-auto overflow-x-hidden relative px-3 md:px-6"
         style={{ 
           // Add padding at the bottom for mobile to account for the fixed nav bar
-          paddingBottom: isMobile ? "calc(1rem + 56px)" : "1rem" 
+          paddingBottom: isMobile ? "calc(2rem + 64px)" : "1rem" 
         }}
       >
         {/* Background pattern to make the mica effect more visible */}
-        <div className="fixed inset-0 opacity-5 z-0">
+        <div className="fixed inset-0 opacity-5 z-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-purple-800 opacity-10"></div>
           <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-blue-500 to-transparent opacity-5"></div>
         </div>
         
-        <div className="relative z-1 py-4">
+        <div className="relative z-1 py-4 max-w-6xl mx-auto">
           <Outlet />
         </div>
       </motion.main>
