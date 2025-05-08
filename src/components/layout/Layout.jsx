@@ -41,7 +41,7 @@ const Layout = () => {
         }}
       >
         {/* Background pattern to make the mica effect more visible */}
-        <div className="fixed inset-0 opacity-5 z-0 pointer-events-none">
+        <div className="fixed inset-0 opacity-5 z-[-1] pointer-events-none"> {/* Adjusted z-index */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-purple-800 opacity-10"></div>
           <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-blue-500 to-transparent opacity-5"></div>
         </div>

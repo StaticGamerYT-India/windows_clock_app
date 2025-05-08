@@ -12,7 +12,7 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync"> {/* Fixed mode */}
       <motion.div
         key={location.pathname}
         initial={{ opacity: 0, x: 20 }}

@@ -37,7 +37,7 @@ export function useLocalStorage(key, initialValue) {
     function handleStorageChange(e) {
       if (e.key === key) {
         try {
-          setStoredValue(JSON.parse(e.newValue));
+          setStoredValue(e.newValue ? JSON.parse(e.newValue) : initialValue); // Handle null
         } catch (error) {
           console.error(error);
         }

@@ -72,7 +72,7 @@ const DismissPopup = () => {
 
         {/* Audio element for notification sound */}
         <audio ref={audioRef} preload="auto">
-          <source src="/sounds/notification.mp3" type="audio/mpeg" />
+          <source src="./sounds/notification.mp3" type="audio/mpeg" /> {/* Fixed path */}
         </audio>
       </div>
     </div>

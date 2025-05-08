@@ -114,6 +114,7 @@ const Navbar = () => {
                     <motion.div 
                       layoutId="nav-indicator"
                       className="absolute bottom-0 h-0.5 w-12 bg-customColor-blue"
+                      style={{ position: "absolute" }} // Added position style
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.2 }}
