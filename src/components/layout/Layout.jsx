@@ -34,18 +34,10 @@ const Layout = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.4 }}
-        className="flex-1 overflow-y-auto overflow-x-hidden relative px-3 md:px-6"
-        style={{ 
-          // Add padding at the bottom for mobile to account for the fixed nav bar
-          paddingBottom: isMobile ? "calc(2rem + 64px)" : "1rem" 
-        }}
+        className={`flex-1 overflow-y-auto overflow-x-hidden relative px-3 md:px-6 ${
+          isMobile ? "pb-16" : "pb-4"
+        }`} // Adjusted padding for mobile
       >
-        {/* Background pattern to make the mica effect more visible */}
-        <div className="fixed inset-0 opacity-5 z-[-1] pointer-events-none"> {/* Adjusted z-index */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-purple-800 opacity-10"></div>
-          <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-blue-500 to-transparent opacity-5"></div>
-        </div>
-        
         <div className="relative z-1 py-4 max-w-6xl mx-auto">
           <Outlet />
         </div>

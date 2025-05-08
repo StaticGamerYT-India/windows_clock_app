@@ -6,13 +6,14 @@ import Timer from "./pages/timer/Timer";
 import WorldTime from "./pages/worldTime/WorldTime";
 import Alarm from "./pages/alarm/Alarm";
 import FocusSession from "./pages/focusSession/FocusSession";
+import Signin from "./pages/Signin"; // Ensure Signin page is included
 
 // AnimatedRoutes component to handle page transitions
 const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
-    <AnimatePresence mode="sync"> {/* Fixed mode */}
+    <AnimatePresence mode="wait"> {/* Changed mode to "wait" for smoother transitions */}
       <motion.div
         key={location.pathname}
         initial={{ opacity: 0, x: 20 }}
@@ -22,11 +23,12 @@ const AnimatedRoutes = () => {
       >
         <Routes location={location}>
           <Route path="/" element={<Layout />}>
+            <Route index element={<StopWatch />} />
             <Route path="focus-session" element={<FocusSession />} />
             <Route path="timer" element={<Timer />} />
             <Route path="alarm" element={<Alarm />} />
-            <Route index element={<StopWatch />} />
             <Route path="world-time" element={<WorldTime />} />
+            <Route path="signin" element={<Signin />} /> {/* Added Signin route */}
           </Route>
         </Routes>
       </motion.div>
