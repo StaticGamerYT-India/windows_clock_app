@@ -26,7 +26,8 @@ export default {
           darkBorder: "#4a4a4a",
           red: '#e15a5a',
           yellow: '#e1c75a',
-        }
+        },
+        customGray: "#3e3e3e",
       },
       fontFamily: {
         sans: [
@@ -62,7 +63,7 @@ export default {
     },
   },
   plugins: [
-    function({ addUtilities }) {
+    function({ addUtilities, addVariant }) {
       const newUtilities = {
         '.scrollbar-thin': {
           scrollbarWidth: 'thin',
@@ -88,6 +89,7 @@ export default {
         },
       };
       addUtilities(newUtilities, ['responsive', 'hover']);
+      addVariant('hocus', ['&:hover', '&:focus']); // Enable `hocus` variant
     },
   ],
 };
