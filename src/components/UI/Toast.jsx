@@ -92,13 +92,22 @@ export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
   
   const showToast = (message, options = {}) => {
-    const id = Math.random().toString(36).substring(2, 9);
-    setToasts(prev => [...prev, { id, message, ...options }]);
-    return id;
+    try {
+      const id = Math.random().toString(36).substring(2, 9);
+      setToasts(prev => [...prev, { id, message, ...options }]);
+      return id;
+    } catch (error) {
+      console.error("Error showing toast:", error);
+      return null;
+    }
   };
   
   const dismissToast = (id) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    try {
+      setToasts(prev => prev.filter(toast => toast.id !== id));
+    } catch (error) {
+      console.error("Error dismissing toast:", error);
+    }
   };
   
   return (
@@ -124,9 +133,25 @@ export const ToastProvider = ({ children }) => {
 
 // Custom hook to use the toast context
 export const useToast = () => {
-  const context = React.useContext(ToastContext);
-  if (context === undefined) {
-    throw new Error("useToast must be used within a ToastProvider");
+  try {
+    const context = React.useContext(ToastContext);
+    if (context === undefined) {
+      console.warn("useToast was called outside of a ToastProvider. Using fallback implementation.");
+      return {
+        showToast: (message) => {
+          console.log("Toast (fallback):", message);
+        },
+        dismissToast: () => {}
+      };
+    }
+    return context;
+  } catch (error) {
+    console.error("Error using toast context:", error);
+    return {
+      showToast: (message) => {
+        console.log("Toast (fallback):", message);
+      },
+      dismissToast: () => {}
+    };
   }
-  return context;
 };

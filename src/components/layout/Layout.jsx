@@ -49,18 +49,9 @@ const Layout = () => {
           isMobile ? "pb-20" : "pb-6"
         } scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent`}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.3 }}
-            className="relative z-1 py-4 md:py-6 max-w-6xl mx-auto"
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        <div className="relative z-1 py-4 md:py-6 max-w-6xl mx-auto">
+          <Outlet />
+        </div>
         
         {/* Background decorative elements - subtle UI enhancement */}
         {isLoaded && (

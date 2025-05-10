@@ -1,19 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create a context for theme management
-const ThemeContext = createContext();
+// Create a context for theme management with a default value
+const ThemeContext = createContext({
+  theme: 'dark',
+  toggleTheme: () => {}
+});
 
 export const ThemeProvider = ({ children }) => {
   // Check for user preference in localStorage or system preference
   const getInitialTheme = () => {
-    const savedTheme = localStorage.getItem('windows-clock-theme');
-    if (savedTheme) {
-      return savedTheme;
-    }
-    
-    // Check system preference if available
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light';
+    try {
+      const savedTheme = localStorage.getItem('windows-clock-theme');
+      if (savedTheme) {
+        return savedTheme;
+      }
+      
+      // Check system preference if available
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        return 'light';
+      }
+    } catch (error) {
+      console.error("Error accessing theme preferences:", error);
     }
     
     // Default to dark mode

@@ -14,26 +14,16 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
-    <AnimatePresence mode="wait"> {/* Changed mode to "wait" for smoother transitions */}
-      <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Routes location={location}>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<StopWatch />} />
-            <Route path="focus-session" element={<FocusSession />} />
-            <Route path="timer" element={<Timer />} />
-            <Route path="alarm" element={<Alarm />} />
-            <Route path="world-time" element={<WorldTime />} />
-            <Route path="signin" element={<Signin />} /> {/* Added Signin route */}
-          </Route>
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+    <Routes location={location}>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<StopWatch />} />
+        <Route path="focus-session" element={<FocusSession />} />
+        <Route path="timer" element={<Timer />} />
+        <Route path="alarm" element={<Alarm />} />
+        <Route path="world-time" element={<WorldTime />} />
+        <Route path="signin" element={<Signin />} />
+      </Route>
+    </Routes>
   );
 };
 
