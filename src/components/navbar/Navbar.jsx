@@ -92,15 +92,39 @@ const Navbar = () => {
   );
 
   return (
-    <>      {/* Top navbar for desktop */}
-      <div className="hidden md:flex justify-between items-center px-6 py-3">
-        <div className="text-lg font-medium flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          Windows Clock
-        </div>        <div className="flex items-center gap-4">
+    <>      {/* Top navbar for desktop */}      <div className="hidden md:flex justify-between items-center px-6 py-3">
+        <div className="flex items-center">
+          <div className="text-lg font-medium flex items-center mr-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Windows Clock
+          </div>
+          
+          {/* Desktop Navigation Links */}
+          <div className="flex space-x-4">
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center px-3 py-2 rounded-md transition-colors ${
+                    isActive 
+                      ? "text-white bg-[#3a3a3a]" 
+                      : "text-gray-300 hover:text-white hover:bg-[#2d2d2d]"
+                  }`}
+                >
+                  <item.icon className={`w-5 h-5 mr-1 ${isActive ? "text-customColor-blue" : ""}`} />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-4">
           <div className="text-xl font-light">{formattedTime}</div>
           <ThemeToggle />
           <Link to="/signin" className="p-2 hover:bg-[#3a3a3a] rounded-full transition-colors">
