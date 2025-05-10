@@ -6,7 +6,8 @@ import Timer from "./pages/timer/Timer";
 import WorldTime from "./pages/worldTime/WorldTime";
 import Alarm from "./pages/alarm/Alarm";
 import FocusSession from "./pages/focusSession/FocusSession";
-import Signin from "./pages/Signin"; // Ensure Signin page is included
+import Signin from "./pages/Signin";
+import GlobalStyles from "./components/UI/GlobalStyles";
 
 // AnimatedRoutes component to handle page transitions
 const AnimatedRoutes = () => {
@@ -39,6 +40,7 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <BrowserRouter>
+      <GlobalStyles />
       <AnimatedRoutes />
     </BrowserRouter>
   );

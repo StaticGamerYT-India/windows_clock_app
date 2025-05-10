@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
       backgroundColor: {
@@ -11,23 +12,47 @@ export default {
         'mica-dark': 'rgba(32, 32, 32, 0.85)', // Dark Mica effect
         'mica-darker': 'rgba(25, 25, 25, 0.9)',
         'mica-component': 'rgba(45, 45, 45, 0.6)', // Component background
+        'mica-component-light': 'rgba(240, 240, 240, 0.7)', // Light mode component
       },
       screens: {
         'xs': '480px',
+        '3xl': '1920px',
       },
       colors: {
         customColor: {
           blue: "#3a9fe0",
+          blueHover: "#2989cd",
           green: "#16cca2",
+          greenHover: "#0fb993",
           darkBg: "#202020",
+          lightBg: "#f5f5f5",
           darkCard: "#2a2a2a",
+          lightCard: "#ffffff",
           darkInput: "#3a3a3a",
+          lightInput: "#f0f0f0",
           darkBtn: "#3e3e3e",
+          lightBtn: "#e0e0e0",
           darkBorder: "#4a4a4a",
+          lightBorder: "#e0e0e0",
           red: '#e15a5a',
+          redHover: '#d63d3d',
           yellow: '#e1c75a',
+          yellowHover: '#d4b73f',
+          purple: '#9c5fe0',
+          purpleHover: '#8a4dce',
         },
-        customGray: "#3e3e3e",
+        customGray: {
+          DEFAULT: "#3e3e3e",
+          100: "#f5f5f5",
+          200: "#e0e0e0",
+          300: "#c0c0c0",
+          400: "#9e9e9e",
+          500: "#757575",
+          600: "#5e5e5e",
+          700: "#3e3e3e",
+          800: "#2a2a2a",
+          900: "#1a1a1a",
+        },
       },
       fontFamily: {
         sans: [

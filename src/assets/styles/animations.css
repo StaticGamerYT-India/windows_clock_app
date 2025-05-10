@@ -5,7 +5,28 @@
 }
 
 .fade-in {
-  animation: fade-in 0.5s ease-out;
+  animation: fade-in 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Subtle pulse animation for interactive elements */
+@keyframes subtle-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.pulse-subtle {
+  animation: subtle-pulse 2s ease-in-out infinite;
+}
+
+/* Progress bar fill animation */
+@keyframes progress-fill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.progress-fill {
+  animation: progress-fill var(--duration, 1s) linear forwards;
 }
 
 /* Slide In Animations */
